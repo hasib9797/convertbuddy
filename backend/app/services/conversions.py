@@ -21,7 +21,6 @@ def mp4_to_mp3(src: Path, dst: Path, bitrate: str = "192k"):
 
 def pdf_to_jpg(src: Path, dst_dir: Path, dpi: int = 200):
     dst_dir.mkdir(parents=True, exist_ok=True)
-    # Produces files like page-1.jpg, page-2.jpg
     run([
         "pdftoppm",
         "-jpeg",
@@ -38,6 +37,16 @@ def jpg_to_pdf(src: Path, dst: Path, dpi: int = 300):
         "-density", str(dpi),
         str(dst),
     ])
+
+def images_to_pdf(src_list: list[Path], dst: Path, dpi: int = 300):
+    # Convert multiple images into a single multi-page PDF, preserving order.
+    if not src_list:
+        raise ConversionError("No images provided")
+    args = ["magick"]
+    for p in src_list:
+        args.append(str(p))
+    args += ["-units", "PixelsPerInch", "-density", str(dpi), str(dst)]
+    run(args)
 
 def docx_to_pdf(src: Path, out_dir: Path):
     run([

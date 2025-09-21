@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from .routers import health, jobs
+from .routers import health, jobs, files
 from .config import settings
 
-app = FastAPI(title="Convert Buddy API", version="0.1.0")
+app = FastAPI(title="Convert Buddy API", version="0.1.1")
 
 app.add_middleware(
     CORSMiddleware,
@@ -16,6 +15,5 @@ app.add_middleware(
 
 app.include_router(health.router, prefix="/health", tags=["health"])
 app.include_router(jobs.router, prefix="/jobs", tags=["jobs"])
-
-# Expose generated files
-app.mount("/files", StaticFiles(directory=str(settings.storage_dir), html=False), name="files")
+# Custom file router that forces download (no StaticFiles mount)
+app.include_router(files.router, tags=["files"])

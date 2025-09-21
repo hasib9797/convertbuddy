@@ -29,6 +29,20 @@ services:
     command: >
       sh -c "celery -A backend.app.workers.tasks.celery worker --loglevel=INFO"
 
+  beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app/backend
+      - data_storage:${STORAGE_DIR:-/data/storage}
+    depends_on:
+      - redis
+    command: >
+      sh -c "celery -A backend.app.workers.tasks.celery beat --loglevel=INFO"
+
   redis:
     image: redis:7-alpine
     ports:

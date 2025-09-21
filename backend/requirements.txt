@@ -1,0 +1,9 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+python-multipart==0.0.9
+pydantic==2.9.2
+pydantic-settings==2.5.2
+celery==5.4.0
+redis==5.0.8
+python-magic==0.4.27
+aiofiles==23.2.1
